@@ -5,8 +5,8 @@ import (
 	"context"
 	"time"
 	"log"
-	"fmt"
-    "io/ioutil"
+	// "fmt"
+    // "io/ioutil"
     "os"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -34,19 +34,19 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	response, err := http.Get("https://api.typeform.com/forms/GA1xBQ/responses")
-	if err != nil {
-        fmt.Printf("%s", err)
-        os.Exit(1)
-    } else {
-        defer response.Body.Close()
-        contents, err := ioutil.ReadAll(response.Body)
-        if err != nil {
-            fmt.Printf("%s", err)
-            os.Exit(1)
-        }
-        fmt.Printf("%s\n", string(contents))
-    }
+	// response, err := http.Get("https://api.typeform.com/forms/GA1xBQ/responses")
+	// if err != nil {
+    //     fmt.Printf("%s", err)
+    //     os.Exit(1)
+    // } else {
+    //     defer response.Body.Close()
+    //     contents, err := ioutil.ReadAll(response.Body)
+    //     if err != nil {
+    //         fmt.Printf("%s", err)
+    //         os.Exit(1)
+    //     }
+    //     fmt.Printf("%s\n", string(contents))
+    // }
 	// Route => handler
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!\n")
