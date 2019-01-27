@@ -51,7 +51,7 @@ func main() {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!\n")
 	})
-	e.POST("/newuser", func(c echo.Context) error{
+	e.GET("/newuser", func(c echo.Context) error{
 		return c.JSON(http.StatusOK, "{'response':'good'}")
 	})
 
