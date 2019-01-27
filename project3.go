@@ -55,7 +55,11 @@ func main() {
 		return c.JSON(http.StatusOK, "{'response':'good'}")
 	})
 
+	port := os.Getenv("PORT")
 
+	if port == "" {
+		log.Fatal("$PORT must be set")
+	}
 	// Start server
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(":"+port))
 }
