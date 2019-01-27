@@ -33,6 +33,11 @@ func main() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	e.Use(middleware.CORS())
+	// e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+	// 	AllowOrigins: []string{"https://labstack.com", "https://labstack.net"},
+	// 	AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	// }))
 
 	// response, err := http.Get("https://api.typeform.com/forms/GA1xBQ/responses")
 	// if err != nil {
