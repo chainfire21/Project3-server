@@ -6,10 +6,10 @@ type UserModel struct {
 	Name 			string				`json:"name"`
 	Password		string				`json:"pword"`
 	Email 			string				`json:"confirmedEmail"`
-	UserType		string
+	UserType		string				`json:"userType"`
 	Results 		map[string]string   `json:"results"`
-	Matches 		[]string
-	Appts 			[]*Appt
+	Matches 		[]string			`json:"matches"`
+	Appts 			[]*Appt				`json:"appts"`
 }
 
 type Appt struct {

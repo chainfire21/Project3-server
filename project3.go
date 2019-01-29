@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"Project3-server/mongo"
+	// "Project3-server/mongo"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -49,7 +49,7 @@ func checkProd(p string) (prt string){
 	if p == ""{
 		return ":1323"
 	}
-	return p
+	return ":"+p
 }
 
 func main() {
@@ -67,13 +67,14 @@ func main() {
 		return c.String(http.StatusOK, "Hello, World!\n")
 	})
 	e.POST("/newuser", func(c echo.Context) error{
-		log.Println("IN POST")
-		log.Println(c)
-		var u mongo.UserModel
-		c.Bind(u)
-		log.Println("What is u")
-		log.Println(u)		
-		return c.JSON(http.StatusOK, "{'response':'good'}")
+		// log.Println("IN POST")
+		// log.Println(c)
+		// var u mongo.UserModel
+		m := echo.Map{}
+		if err := c.Bind(&m); err != nil {
+			return err
+		}
+		return c.JSON(200, m)	
 	})
 	port := os.Getenv("PORT")
 
