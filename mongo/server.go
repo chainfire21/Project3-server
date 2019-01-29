@@ -18,7 +18,7 @@ func AddUser(u *UserModel) (val interface{}){
 		log.Fatal(err)
 	}
 	// log.Println(client)	
-	collection := client.Database("testing").Collection("numbers")
+	collection := client.Database("heroku_w02f0l1k").Collection("numbers")
 	res, err := collection.InsertOne(ctx, u)
 	id := res.InsertedID
 	return id
