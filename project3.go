@@ -60,6 +60,7 @@ func main() {
 		return c.String(http.StatusOK, "Hello, World!\n")
 	})
 	e.POST("/newuser", func(c echo.Context) error{
+		log.Println("IN POST")
 		var u mongo.UserModel
 		c.Bind(u)
 		log.Println(u)
