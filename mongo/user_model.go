@@ -6,7 +6,7 @@ type UserModel struct {
 	Name 			string				`json:"name"`
 	Password		string				`json:"pword"`
 	Email 			string				`json:"confirmedEmail"`
-	UserType		string				`json:"userType"`
+	UserType		string				`json:"user"`
 	Results 		map[string]string   `json:"results"`
 	Matches 		[]string			`json:"matches"`
 	Appts 			[]*Appt				`json:"appts"`

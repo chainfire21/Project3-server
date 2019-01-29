@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	// "Project3-server/mongo"
+	"Project3-server/mongo"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -70,11 +70,11 @@ func main() {
 		// log.Println("IN POST")
 		// log.Println(c)
 		// var u mongo.UserModel
-		m := echo.Map{}
+		m := mongo.UserModel{}
 		if err := c.Bind(&m); err != nil {
 			return err
 		}
-		return c.JSON(200, m)	
+		return c.JSON(200, mongo.AddUser(&m))	
 	})
 	port := os.Getenv("PORT")
 

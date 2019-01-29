@@ -9,7 +9,7 @@ import(
 
 )
 
-func addUser(u *UserModel) (val interface{}, name string){
+func AddUser(u *UserModel) (val interface{}){
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	// client, err := mongo.Connect(ctx, "mongodb://localhost:27017")
@@ -21,5 +21,5 @@ func addUser(u *UserModel) (val interface{}, name string){
 	collection := client.Database("testing").Collection("numbers")
 	res, err := collection.InsertOne(ctx, u)
 	id := res.InsertedID
-	return id, u.Name
+	return id
 }
