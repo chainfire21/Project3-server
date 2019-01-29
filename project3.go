@@ -45,6 +45,13 @@ func getSurveyData(userType string){
 	}
 }
 
+func checkProd(p string) (prt string){
+	if p == ""{
+		return ":1323"
+	}
+	return p
+}
+
 func main() {
 	// Echo instance
 	e := echo.New()
@@ -61,18 +68,16 @@ func main() {
 	})
 	e.POST("/newuser", func(c echo.Context) error{
 		log.Println("IN POST")
+		log.Println(c)
 		var u mongo.UserModel
 		c.Bind(u)
-		log.Println(u)
+		log.Println("What is u")
+		log.Println(u)		
 		return c.JSON(http.StatusOK, "{'response':'good'}")
 	})
 	port := os.Getenv("PORT")
 
-	// if port == "" {
-	// 	log.Fatal("$PORT must be set")
-	// }
 	// Start server
-	e.Logger.Fatal(e.Start(":"+port))
-	// e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(checkProd(port)))
 
 }
