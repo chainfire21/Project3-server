@@ -13,13 +13,16 @@ import(
 func AddUser(u *UserModel) (val interface{}){
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	// client, err := mongo.Connect(ctx, "mongodb://localhost:27017")
-	client, err := mongo.Connect(ctx, "mongodb://heroku_w02f0l1k:30fj40p12gho8osfmp81qd1oq7@ds213755.mlab.com:13755/heroku_w02f0l1k")
+	client, err := mongo.Connect(ctx, "mongodb://localhost:27017")
+	// client, err := mongo.Connect(ctx, "mongodb://heroku_w02f0l1k:30fj40p12gho8osfmp81qd1oq7@ds213755.mlab.com:13755/heroku_w02f0l1k")
 	if err != nil{
 		log.Fatal(err)
 	}
 	
-	collection := client.Database("heroku_w02f0l1k").Collection("numbers")
+	// collection := client.Database("heroku_w02f0l1k").Collection("numbers")
+	collection := client.Database("testing").Collection("numbers")
+	log.Println("HEY u")
+	log.Println(u)
 	res, err := collection.InsertOne(ctx, u)
 	id := res.InsertedID
 	return id
