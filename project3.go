@@ -78,7 +78,7 @@ func main() {
 		if err := c.Bind(&m); err != nil {
 			return err
 		}
-		return c.JSON(200, mongo.AddUser(&m))	
+		return c.JSON(200, mongo.AddUser(m))	
 	})
 	port := os.Getenv("PORT")
 

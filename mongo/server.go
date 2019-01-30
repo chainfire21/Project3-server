@@ -10,7 +10,7 @@ import(
 
 )
 
-func AddUser(u *UserModel) (val interface{}){
+func AddUser(u UserModel) (val interface{}){
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	// client, err := mongo.Connect(ctx, "mongodb://localhost:27017")
