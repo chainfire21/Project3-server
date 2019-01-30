@@ -16,12 +16,12 @@ import (
 	// "github.com/mongodb/mongo-go-driver/bson"
 )
 
-func getSurveyData(userType string){
+func getSurveyData(){
 	var prettyJSON bytes.Buffer
 	httpClient := &http.Client{}
-	if userType == "user"{
-		fmt.Println("HI DETECTED")
-	}
+	// if userType == "user"{
+	// 	fmt.Println("HI DETECTED")
+	// }
 	
 	req, err := http.NewRequest("GET", "https://api.typeform.com/forms/GA1xBQ/responses",nil)
 	req.Header.Add("Authorization", "Bearer Gr8o49DXvMTTVnDaCNjz86mS2kE283snRA4S25ULogmk")
@@ -56,7 +56,7 @@ func main() {
 	// Echo instance
 	e := echo.New()
 
-	
+	// getSurveyData()
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
@@ -65,6 +65,10 @@ func main() {
 	// Route => handler
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!\n")
+	})
+	e.GET("/user/:email", func(c echo.Context) error{
+		// log.Println(c.Param("id"))
+		return c.JSON(200,mongo.GetUser(c.Param("email")))
 	})
 	e.POST("/newuser", func(c echo.Context) error{
 		// log.Println("IN POST")
