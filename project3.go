@@ -2,48 +2,41 @@ package main
 
 import (
 	"net/http"
-	"log"
-	"fmt"
-    "io/ioutil"
 	"os"
-	"bytes"
-	"encoding/json"
 
 	"Project3-server/mongo"
+	"Project3-server/typeform"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	// "github.com/mongodb/mongo-go-driver/bson"
 )
 
-func getSurveyData(){
-	var prettyJSON bytes.Buffer
-	httpClient := &http.Client{}
-	// if userType == "user"{
-	// 	fmt.Println("HI DETECTED")
-	// }
+// func getSurveyData(){
+// 	var prettyJSON bytes.Buffer
+// 	httpClient := &http.Client{}
 	
-	req, err := http.NewRequest("GET", "https://api.typeform.com/forms/GA1xBQ/responses",nil)
-	req.Header.Add("Authorization", "Bearer Gr8o49DXvMTTVnDaCNjz86mS2kE283snRA4S25ULogmk")
-	response, err := httpClient.Do(req)
-	if err != nil {
-		fmt.Printf("%s", err)
-		os.Exit(1)
-	} else {
-		defer response.Body.Close()
-		contents, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			fmt.Printf("%s", err)
-			os.Exit(1)
-		}
-		error := json.Indent(&prettyJSON, contents, "", "\t")
-		if error != nil {
-			log.Println("JSON parse error: ", error)
-			return
-		}
-		fmt.Printf("%s\n", string(prettyJSON.Bytes()))
-	}
-}
+// 	req, err := http.NewRequest("GET", "https://api.typeform.com/forms/pHdQSo/responses",nil)
+// 	req.Header.Add("Authorization", "Bearer Gr8o49DXvMTTVnDaCNjz86mS2kE283snRA4S25ULogmk")
+// 	response, err := httpClient.Do(req)
+// 	if err != nil {
+// 		fmt.Printf("%s", err)
+// 		os.Exit(1)
+// 	} else {
+// 		defer response.Body.Close()
+// 		contents, err := ioutil.ReadAll(response.Body)
+// 		if err != nil {
+// 			fmt.Printf("%s", err)
+// 			os.Exit(1)
+// 		}
+// 		error := json.Indent(&prettyJSON, contents, "", "\t")
+// 		if error != nil {
+// 			log.Println("JSON parse error: ", error)
+// 			return
+// 		}
+// 		fmt.Printf("%s\n", string(prettyJSON.Bytes()))
+// 	}
+// }
 
 func checkProd(p string) (prt string){
 	if p == ""{
@@ -56,7 +49,8 @@ func main() {
 	// Echo instance
 	e := echo.New()
 
-	// getSurveyData()
+	typeform.GetSurveyData()
+
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
@@ -67,13 +61,10 @@ func main() {
 		return c.String(http.StatusOK, "Hello, World!\n")
 	})
 	e.GET("/user/:email", func(c echo.Context) error{
-		// log.Println(c.Param("id"))
 		return c.JSON(200,mongo.GetUser(c.Param("email")))
 	})
+
 	e.POST("/newuser", func(c echo.Context) error{
-		// log.Println("IN POST")
-		// log.Println(c)
-		// var u mongo.UserModel
 		m := mongo.UserModel{}
 		if err := c.Bind(&m); err != nil {
 			return err
