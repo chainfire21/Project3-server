@@ -4,36 +4,49 @@ import(
 	"context"
 	"log"
 	"time"
+	"os"
+	// "bytes"
+	"net/http"
+	// "encoding/json"
+	"Project3-server/typeform"
 
+	// "github.com/Jeffail/gabs"
 	"github.com/mongodb/mongo-go-driver/mongo"
 	"github.com/mongodb/mongo-go-driver/bson"
 
 )
 
+var myClient = &http.Client{Timeout: 10 * time.Second}
+
 func connectServer() (coll *mongo.Collection, CancelFunc func()){
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
 	// client, err := mongo.Connect(ctx, "mongodb://localhost:27017")
-	client, err := mongo.Connect(ctx, "mongodb://heroku_w02f0l1k:30fj40p12gho8osfmp81qd1oq7@ds213755.mlab.com:13755/heroku_w02f0l1k")
+	client, err := mongo.Connect(ctx, os.Getenv("MONGODB_URI"))
 	if err != nil {
 		log.Fatal(err)
 	}
-	collection := client.Database("heroku_w02f0l1k").Collection("numbers")
+	collection := client.Database(os.Getenv("MONGODB_DB")).Collection("users")
 	// collection := client.Database("testing").Collection("numbers")
 
 	return collection, cancel
+}
+
+func GetMatches(e string){
+	matches := typeform.GetSurveyData()
+	log.Println(matches)
 }
 
 func AddUser(u UserModel) (val interface{}){
 	collection, cancel := connectServer()
 	defer cancel()
 
-	res, err := collection.InsertOne(context.Background(), u)
+	_, err := collection.InsertOne(context.Background(), u)
 	if err != nil{
 		log.Fatal(err)
+		return err
 	}
-	id := res.InsertedID
-	return id
+	return "User Created"
 }
 
 func GetUser(email string) (res UserModel){

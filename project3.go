@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"os"
+	// "log"
 
 	"Project3-server/mongo"
 	"Project3-server/typeform"
@@ -11,32 +12,6 @@ import (
 	"github.com/labstack/echo/middleware"
 	// "github.com/mongodb/mongo-go-driver/bson"
 )
-
-// func getSurveyData(){
-// 	var prettyJSON bytes.Buffer
-// 	httpClient := &http.Client{}
-	
-// 	req, err := http.NewRequest("GET", "https://api.typeform.com/forms/pHdQSo/responses",nil)
-// 	req.Header.Add("Authorization", "Bearer Gr8o49DXvMTTVnDaCNjz86mS2kE283snRA4S25ULogmk")
-// 	response, err := httpClient.Do(req)
-// 	if err != nil {
-// 		fmt.Printf("%s", err)
-// 		os.Exit(1)
-// 	} else {
-// 		defer response.Body.Close()
-// 		contents, err := ioutil.ReadAll(response.Body)
-// 		if err != nil {
-// 			fmt.Printf("%s", err)
-// 			os.Exit(1)
-// 		}
-// 		error := json.Indent(&prettyJSON, contents, "", "\t")
-// 		if error != nil {
-// 			log.Println("JSON parse error: ", error)
-// 			return
-// 		}
-// 		fmt.Printf("%s\n", string(prettyJSON.Bytes()))
-// 	}
-// }
 
 func checkProd(p string) (prt string){
 	if p == ""{
@@ -49,7 +24,7 @@ func main() {
 	// Echo instance
 	e := echo.New()
 
-	typeform.GetSurveyData()
+	typeform.GetMatches()
 
 	// Middleware
 	e.Use(middleware.Logger())
@@ -62,6 +37,11 @@ func main() {
 	})
 	e.GET("/user/:email", func(c echo.Context) error{
 		return c.JSON(200,mongo.GetUser(c.Param("email")))
+	})
+
+	e.GET("/matches/:email", func(c echo.Context) error{
+		mongo.GetMatches(c.Param("email"))
+		return c.JSON(200, "{hey:testing}")
 	})
 
 	e.POST("/newuser", func(c echo.Context) error{
