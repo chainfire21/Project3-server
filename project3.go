@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"os"
 	// "log"
+	// "encoding/json"
 
 	"Project3-server/mongo"
-	"Project3-server/typeform"
+	// "Project3-server/typeform"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -24,7 +25,7 @@ func main() {
 	// Echo instance
 	e := echo.New()
 
-	typeform.GetMatches()
+	// mongo.GetMatches("f@gmail.com")
 
 	// Middleware
 	e.Use(middleware.Logger())
@@ -40,7 +41,8 @@ func main() {
 	})
 
 	e.GET("/matches/:email", func(c echo.Context) error{
-		mongo.GetMatches(c.Param("email"))
+		mongo.UpdateUser(c.Param("email"))
+		// mongo.GetMatches(c.Param("email"))
 		return c.JSON(200, "{hey:testing}")
 	})
 
