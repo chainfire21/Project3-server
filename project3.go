@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 	"os"
-	// "log"
-	// "encoding/json"
+	"log"
+	"encoding/json"
 
 	"Project3-server/mongo"
 	// "Project3-server/typeform"
@@ -25,7 +25,10 @@ func main() {
 	// Echo instance
 	e := echo.New()
 
-	// mongo.GetMatches("f@gmail.com")
+	matches := mongo.GetMatches("f@gmail.com")
+	log.Println(matches)
+	jsonString, _ := json.Marshal(matches)
+	log.Println(jsonString)
 
 	// Middleware
 	e.Use(middleware.Logger())
@@ -42,8 +45,8 @@ func main() {
 
 	e.GET("/matches/:email", func(c echo.Context) error{
 		mongo.UpdateUser(c.Param("email"))
-		// mongo.GetMatches(c.Param("email"))
-		return c.JSON(200, "{hey:testing}")
+		matches := mongo.GetMatches(c.Param("email"))
+		return c.JSON(200, matches)
 	})
 
 	e.POST("/newuser", func(c echo.Context) error{

@@ -26,3 +26,8 @@ type Appt struct {
 	Date			string `json:"date"`
 	Client			string `json:"client"`
 }
+
+type Match struct {
+	Name 			string `json:"name"`
+	Email			string `json:"email"`
+}

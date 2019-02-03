@@ -3,12 +3,10 @@ package typeform
 import (
 	"net/http"
 	"log"
-	// "fmt"
-	// "strings"
+
 	"io/ioutil"
 	"os"
-	// "bytes"
-	// "encoding/json"
+
 	"github.com/Jeffail/gabs"
 
 )
@@ -16,14 +14,12 @@ import (
 func GetSurveyDataCoach() *gabs.Container{
 	httpClient := &http.Client{}
 	req, err := http.NewRequest("GET", "https://api.typeform.com/forms/"+os.Getenv("TYPEFORM_COACH")+"/responses",nil)
-	// req, err := http.NewRequest("GET", "https://api.typeform.com/forms/Kwud6N/responses",nil)
 	if err != nil{
 		log.Fatal(err)
 	}
 
 
 	req.Header.Add("Authorization", "Bearer "+os.Getenv("TYPEFORM_AUTH"))
-	// req.Header.Add("Authorization", "Bearer Gr8o49DXvMTTVnDaCNjz86mS2kE283snRA4S25ULogmk")
 	response, err := httpClient.Do(req)
 	if err != nil{
 		log.Fatal(err)

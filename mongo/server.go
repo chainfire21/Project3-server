@@ -10,7 +10,7 @@ import(
 	"encoding/json"
 	"Project3-server/typeform"
 
-	// "github.com/Jeffail/gabs"
+	"github.com/Jeffail/gabs"
 	"github.com/mongodb/mongo-go-driver/mongo"
 
 	"github.com/mongodb/mongo-go-driver/bson"
@@ -23,45 +23,65 @@ func connectServer() (coll *mongo.Collection, CancelFunc func()){
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
 	client, err := mongo.Connect(ctx, os.Getenv("MONGODB_URI"))
-	// client, err := mongo.Connect(ctx, "mongodb://heroku_w02f0l1k:30fj40p12gho8osfmp81qd1oq7@ds213755.mlab.com:13755/heroku_w02f0l1k")
 
 	if err != nil {
 		log.Fatal(err)
 	}
 	collection := client.Database(os.Getenv("MONGODB_DB")).Collection("users")
-	// collection := client.Database("heroku_w02f0l1k").Collection("users")
 
 
 	return collection, cancel
 }
 
-func GetMatches(e string){
+func GetMatches(e string) []Match {
 	// user := GetUser(e)
 	collection, cancel := connectServer()
 	defer cancel()
-
+	var matches []Match
 	var result UserModel
+	var u UserModel
+	filter := bson.M{"email": e}
+	log.Println(filter)
+	err := collection.FindOne(context.Background(),filter).Decode(&u)
+	if err != nil{
+		log.Fatal(err)
+	}
+
 	cur, err := collection.Find(context.Background(), bson.D{bson.E{Key:"usertype",Value:"coach"}})
 	if err != nil { log.Fatal(err) }
 	defer cur.Close(context.Background())
 	for cur.Next(context.Background()) {
-	   raw, err := cur.DecodeBytes()
-	   if err != nil { log.Fatal(err) }
-	   // do something with elem....
-	   bson.Unmarshal(raw,&result)
-	   log.Println(result)
-	   log.Println(result.Results)
+	    raw, err := cur.DecodeBytes()
+	    if err != nil { log.Fatal(err) }
+	    bson.Unmarshal(raw,&result)
+	    log.Println(result)
+	    log.Println(result.Results)
+	    if result.Results.Gender[0] == u.Results.Gender[0] || result.Results.Gender[1] == u.Results.Gender[0] || result.Results.Gender[2] == u.Results.Gender[0] {
+			log.Println("Matched gender")
+			var new Match
+			new.Name = result.Name
+			new.Email = result.Email
+			matches = append(matches, new)
+	    }
 	}
 	if err := cur.Err(); err != nil {
 			log.Fatal(err)
 	}
+	return matches
 }
 
 func UpdateUser(e string) {
 	coll, cancel :=  connectServer()
 	defer cancel()
 	var r Results
-	surveys := typeform.GetSurveyDataClient()
+	var surveys *gabs.Container
+	userCheck := GetUser(e)
+	if userCheck.UserType == "client"{
+		surveys = typeform.GetSurveyDataClient()
+	}
+	if userCheck.UserType =="coach"{
+		surveys = typeform.GetSurveyDataCoach()
+	}
 	children, _ := surveys.S("items").Children()
 	for _, child := range children {
 		exists := child.ExistsP("answers.email")
