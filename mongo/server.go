@@ -4,7 +4,7 @@ import(
 	"context"
 	"log"
 	"time"
-	// "os"
+	"os"
 	"strings"
 	"net/http"
 	"encoding/json"
@@ -22,14 +22,12 @@ var myClient = &http.Client{Timeout: 10 * time.Second}
 func connectServer() (coll *mongo.Collection, CancelFunc func()){
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
-	// client, err := mongo.Connect(ctx, os.Getenv("MONGODB_URI"))
-	client, err := mongo.Connect(ctx, "mongodb://heroku_w02f0l1k:30fj40p12gho8osfmp81qd1oq7@ds213755.mlab.com:13755/heroku_w02f0l1k")
+	client, err := mongo.Connect(ctx, os.Getenv("MONGODB_URI"))
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	// collection := client.Database(os.Getenv("MONGODB_DB")).Collection("users")
-	collection := client.Database("heroku_w02f0l1k").Collection("users")
+	collection := client.Database(os.Getenv("MONGODB_DB")).Collection("users")
 
 
 	return collection, cancel
