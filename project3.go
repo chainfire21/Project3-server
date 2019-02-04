@@ -25,10 +25,10 @@ func main() {
 	// Echo instance
 	e := echo.New()
 
-	matches := mongo.GetMatches("f@gmail.com")
-	log.Println(matches)
-	jsonString, _ := json.Marshal(matches)
-	log.Println(jsonString)
+	// matches := mongo.GetMatches("f@gmail.com")
+	// log.Println(matches)
+	// jsonString, _ := json.Marshal(matches)
+	// log.Println(jsonString)
 
 	// Middleware
 	e.Use(middleware.Logger())

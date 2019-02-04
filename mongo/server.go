@@ -4,7 +4,7 @@ import(
 	"context"
 	"log"
 	"time"
-	"os"
+	// "os"
 	"strings"
 	"net/http"
 	"encoding/json"
@@ -22,12 +22,14 @@ var myClient = &http.Client{Timeout: 10 * time.Second}
 func connectServer() (coll *mongo.Collection, CancelFunc func()){
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
-	client, err := mongo.Connect(ctx, os.Getenv("MONGODB_URI"))
+	// client, err := mongo.Connect(ctx, os.Getenv("MONGODB_URI"))
+	client, err := mongo.Connect(ctx, "mongodb://heroku_w02f0l1k:30fj40p12gho8osfmp81qd1oq7@ds213755.mlab.com:13755/heroku_w02f0l1k")
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	collection := client.Database(os.Getenv("MONGODB_DB")).Collection("users")
+	// collection := client.Database(os.Getenv("MONGODB_DB")).Collection("users")
+	collection := client.Database("heroku_w02f0l1k").Collection("users")
 
 
 	return collection, cancel
@@ -51,17 +53,16 @@ func GetMatches(e string) []Match {
 	if err != nil { log.Fatal(err) }
 	defer cur.Close(context.Background())
 	for cur.Next(context.Background()) {
-	    raw, err := cur.DecodeBytes()
+	    err := cur.Decode(&result)
 	    if err != nil { log.Fatal(err) }
-	    bson.Unmarshal(raw,&result)
-	    log.Println(result)
-	    log.Println(result.Results)
 	    if result.Results.Gender[0] == u.Results.Gender[0] || result.Results.Gender[1] == u.Results.Gender[0] || result.Results.Gender[2] == u.Results.Gender[0] {
 			log.Println("Matched gender")
 			var new Match
-			new.Name = result.Name
-			new.Email = result.Email
-			matches = append(matches, new)
+			if len(matches) != 3{
+				new.Name = result.Name
+				new.Email = result.Email
+				matches = append(matches, new)
+			}
 	    }
 	}
 	if err := cur.Err(); err != nil {
