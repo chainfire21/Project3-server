@@ -3,8 +3,6 @@ package main
 import (
 	"net/http"
 	"os"
-	"log"
-	"encoding/json"
 
 	"Project3-server/mongo"
 	// "Project3-server/typeform"
