@@ -12,11 +12,10 @@ import (
 
 func GetSurveyDataCoach() *gabs.Container{
 	httpClient := &http.Client{}
-	req, err := http.NewRequest("GET", "https://api.typeform.com/forms/"+os.Getenv("TYPEFORM_COACH")+"/responses",nil)
+	req, err := http.NewRequest("GET", "https://api.typeform.com/forms/"+os.Getenv("TYPEFORM_COACH")+"/responses?page_size=1000",nil)
 	if err != nil{
 		log.Fatal(err)
 	}
-
 
 	req.Header.Add("Authorization", "Bearer "+os.Getenv("TYPEFORM_AUTH"))
 	response, err := httpClient.Do(req)
@@ -35,7 +34,7 @@ func GetSurveyDataCoach() *gabs.Container{
 
 func GetSurveyDataClient() *gabs.Container{
 	httpClient := &http.Client{}
-		req, err := http.NewRequest("GET", "https://api.typeform.com/forms/"+os.Getenv("TYPEFORM_CLIENT")+"/responses",nil)
+		req, err := http.NewRequest("GET", "https://api.typeform.com/forms/"+os.Getenv("TYPEFORM_CLIENT")+"/responses?page_size=1000",nil)
 		if err != nil{
 			log.Fatal(err)
 		}
